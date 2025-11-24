@@ -21,9 +21,10 @@
 #include <stdio.h>
 #include <math.h>
 #include <stdlib.h>
-
+#include <sys/time.h>
 
 double CalcPi(int n);
+double GetTime();
 
 int main(int argc, char **argv)
 {
@@ -43,17 +44,16 @@ int main(int argc, char **argv)
         return 1;
     }
     
-    // get initial time 
+    fTimeStart = GetTime();
 
     /* the calculation is done here*/
     fPi = CalcPi(n);
 
-    //get final fime
+    fTimeEnd = GetTime();
     
     printf("\npi is approximately = %.20f \nError               = %.20f\n",
            fPi, fabs(fPi - fPi25DT));
-    
-    // report time
+    printf("Time was = %.4f s\n", fTimeEnd - fTimeStart);
 
     return 0;
 }
@@ -78,4 +78,10 @@ double CalcPi(int n)
         fSum += f(fX);
     }
     return fH * fSum;
+}
+
+double GetTime() {
+    struct timeval t;
+    gettimeofday(&t, NULL);
+    return t.tv_sec + t.tv_usec * 1e-6;
 }
